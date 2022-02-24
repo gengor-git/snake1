@@ -50,10 +50,10 @@ def choose_move(data: dict) -> str:
     my_body = data["you"]["body"]  # A list of x/y coordinate dictionaries like [ {"x": 0, "y": 0}, {"x": 1, "y": 0}, {"x": 2, "y": 0} ]
 
     # TODO: uncomment the lines below so you can see what this data looks like in your output!
-    # print(f"~~~ Turn: {data['turn']}  Game Mode: {data['game']['ruleset']['name']} ~~~")
-    # print(f"All board data this turn: {data}")
-    # print(f"My Battlesnakes head this turn is: {my_head}")
-    # print(f"My Battlesnakes body this turn is: {my_body}")
+    print(f"~~~ Turn: {data['turn']}  Game Mode: {data['game']['ruleset']['name']} ~~~")
+    print(f"All board data this turn: {data}")
+    print(f"My Battlesnakes head this turn is: {my_head}")
+    print(f"My Battlesnakes body this turn is: {my_body}")
 
     possible_moves = ["up", "down", "left", "right"]
 
@@ -73,10 +73,6 @@ def choose_move(data: dict) -> str:
     # Choose a random direction from the remaining possible_moves to move in, and then return that move
     # move = random.choice(possible_moves)
     # TODO: Explore new strategies for picking a move that are better than random
-
-    print(my_head)
-    print(my_body)
-
 
 
     print(f"{data['game']['id']} MOVE {data['turn']}: {move} picked from all valid options in {possible_moves}")
