@@ -26,8 +26,8 @@ def handle_info():
         "apiversion": "1",
         "author": "gengor-git",  # TODO: Your Battlesnake Username
         "color": "#800080",  # TODO: Personalize
-        "head": "#00CED1",  # TODO: Personalize
-        "tail": "#20B2AA",  # TODO: Personalize
+        "head": "evil",  # TODO: Personalize
+        "tail": "curled",  # TODO: Personalize
     }
 
 
