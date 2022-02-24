@@ -75,6 +75,11 @@ def choose_move(data: dict) -> str:
     # TODO: Explore new strategies for picking a move that are better than random
 
 
+    if my_head["x"] == 0:
+        move = "up"
+    else:
+        move = "left"
+
     print(f"{data['game']['id']} MOVE {data['turn']}: {move} picked from all valid options in {possible_moves}")
 
     return move
