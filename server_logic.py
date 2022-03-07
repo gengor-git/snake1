@@ -58,7 +58,7 @@ def choose_move(data: dict) -> str:
     possible_moves = ["up", "down", "left", "right"]
 
     # Don't allow your Battlesnake to move back in on it's own neck
-    possible_moves = avoid_my_neck(my_head, my_body, possible_moves)
+    #possible_moves = avoid_my_neck(my_head, my_body, possible_moves)
 
     # TODO: Using information from 'data', find the edges of the board and don't let your Battlesnake move beyond them
     board_height = data["board"]["height"]
@@ -74,37 +74,50 @@ def choose_move(data: dict) -> str:
     # move = random.choice(possible_moves)
     # TODO: Explore new strategies for picking a move that are better than random
 
-    # Don't move up if ...
-    if my_head["y"] == board_height -1:
+
+    if not isUpSafe(my_head, my_body, board_height, board_width):
         possible_moves.remove("up")
-    for section in my_body:
-        if my_head["x"] == section["x"] & my_head["y"] == section["y"]-1:
-            possible_moves.remove("up")
-
-    # Don't move left if ...
-    if my_head["x"] == 0:
-        possible_moves.remove("left")
-    for section in my_body:
-        if my_head["y"] == section["y"] & my_head["x"] == section["x"]+1:
-            possible_moves.remove("up")
-
-    # Don't move down if ...
-    if my_head["y"] == 0:
+    if not isDownSafe(my_head, my_body, board_height, board_width):
         possible_moves.remove("down")
-    for section in my_body:
-        if my_head["x"] == section["x"] & my_head["y"] == section["y"]+1:
-            possible_moves.remove("up")
-
-    # Don't move right if ...
-    if my_head["x"] == board_width - 1:
+    if not isLeftSafe(my_head, my_body, board_height, board_width):
+        possible_moves.remove("left")
+    if not isRightSafe(my_head, my_body, board_height, board_width):
         possible_moves.remove("right")
-    for section in my_body:
-        if my_head["y"] == section["y"] & my_head["x"] == section["x"]-1:
-            possible_moves.remove("up")
 
     move = random.choice(possible_moves)
-
 
     print(f"{data['game']['id']} MOVE {data['turn']}: {move} picked from all valid options in {possible_moves}")
 
     return move
+
+def isUpSafe(my_head: Dict[str, int], my_body: List[dict], board_height, board_width):
+    if my_head["y"] == board_height -1:
+        return False
+    for section in my_body:
+        if my_head["x"] == section["x"] & my_head["y"] == section["y"]-1:
+            return False
+    return True
+
+def isDownSafe(my_head: Dict[str, int], my_body: List[dict], board_height, board_width):
+    if my_head["y"] == 0:
+        return False
+    for section in my_body:
+        if my_head["x"] == section["x"] & my_head["y"] == section["y"]+1:
+            return False
+    return True
+
+def isLeftSafe(my_head: Dict[str, int], my_body: List[dict], board_height, board_width):
+    if my_head["y"] == 0:
+        return False
+    for section in my_body:
+        if my_head["y"] == section["y"] & my_head["x"] == section["x"]+1:
+            return False
+    return True
+
+def isRightSafe(my_head: Dict[str, int], my_body: List[dict], board_height, board_width):
+    if my_head["x"] == board_width -1:
+        return False
+    for section in my_body:
+        if my_head["y"] == section["y"] & my_head["x"] == section["y"]-1:
+            return False
+    return True
