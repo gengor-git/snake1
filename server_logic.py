@@ -57,6 +57,9 @@ def choose_move(data: dict) -> str:
 
     possible_moves = ["up", "down", "left", "right"]
 
+    snakes = data["board"]["snakes"]
+
+
     # Don't allow your Battlesnake to move back in on it's own neck
     #possible_moves = avoid_my_neck(my_head, my_body, possible_moves)
 
@@ -75,16 +78,16 @@ def choose_move(data: dict) -> str:
     # TODO: Explore new strategies for picking a move that are better than random
 
 
-    if not is_up_safe(my_head, my_body, board_height, board_width):
+    if not is_up_safe(my_head, my_body, board_height, board_width, snakes):
         print(f"Removing up, it's dangerous!")
         possible_moves.remove("up")
-    if not is_down_safe(my_head, my_body, board_height, board_width):
+    if not is_down_safe(my_head, my_body, board_height, board_width, snakes):
         print(f"Removing down, it's dangerous!")
         possible_moves.remove("down")
-    if not is_left_safe(my_head, my_body, board_height, board_width):
+    if not is_left_safe(my_head, my_body, board_height, board_width, snakes):
         print(f"Removing left, it's dangerous!")
         possible_moves.remove("left")
-    if not is_right_safe(my_head, my_body, board_height, board_width):
+    if not is_right_safe(my_head, my_body, board_height, board_width, snakes):
         print(f"Removing right, it's dangerous!")
         possible_moves.remove("right")
 
@@ -94,7 +97,7 @@ def choose_move(data: dict) -> str:
 
     return move
 
-def is_up_safe(my_head: Dict[str, int], my_body: List[dict], board_height, board_width):
+def is_up_safe(my_head: Dict[str, int], my_body: List[dict], board_height, board_width, snakes):
     safeness = True
     if my_head["y"] == board_height-1:
         safeness = False
@@ -102,9 +105,13 @@ def is_up_safe(my_head: Dict[str, int], my_body: List[dict], board_height, board
     new_coords = {"x": my_head["x"], "y": my_head["y"]+1}
     if new_coords in my_body:
             safeness = False
+
+    for snake in snakes:
+        if new_coords in snake["body"]:
+            safeness = False
     return safeness
 
-def is_down_safe(my_head: Dict[str, int], my_body: List[dict], board_height, board_width):
+def is_down_safe(my_head: Dict[str, int], my_body: List[dict], board_height, board_width, snakes):
     safeness = True
     if my_head["y"] == 0:
         safeness = False
@@ -113,9 +120,13 @@ def is_down_safe(my_head: Dict[str, int], my_body: List[dict], board_height, boa
     if new_coords in my_body:
             safeness = False
     
+    for snake in snakes:
+        if new_coords in snake["body"]:
+            safeness = False
+
     return safeness
 
-def is_left_safe(my_head: Dict[str, int], my_body: List[dict], board_height, board_width):
+def is_left_safe(my_head: Dict[str, int], my_body: List[dict], board_height, board_width, snakes):
     safeness = True
     if my_head["x"] == 0:
         safeness = False
@@ -124,15 +135,23 @@ def is_left_safe(my_head: Dict[str, int], my_body: List[dict], board_height, boa
     if new_coords in my_body:
             safeness = False
 
+    for snake in snakes:
+        if new_coords in snake["body"]:
+            safeness = False
+
     return safeness
 
-def is_right_safe(my_head: Dict[str, int], my_body: List[dict], board_height, board_width):
+def is_right_safe(my_head: Dict[str, int], my_body: List[dict], board_height, board_width, snakes):
     safeness = True
     if my_head["x"] == board_width-1:
         safeness = False
 
     new_coords = {"x": my_head["x"]+1, "y": my_head["y"]}
     if new_coords in my_body:
+            safeness = False
+
+    for snake in snakes:
+        if new_coords in snake["body"]:
             safeness = False
 
     return safeness
