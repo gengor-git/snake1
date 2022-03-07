@@ -98,6 +98,7 @@ def is_up_safe(my_head: Dict[str, int], my_body: List[dict], board_height, board
     if my_head["y"] == board_height -1:
         return False
     for section in my_body:
+        print(f"{section}")
         if my_head["x"] == section["x"] & my_head["y"] == section["y"]-1:
             return False
     return True
@@ -106,6 +107,7 @@ def is_down_safe(my_head: Dict[str, int], my_body: List[dict], board_height, boa
     if my_head["y"] == 0:
         return False
     for section in my_body:
+        print(f"{section}")
         if my_head["x"] == section["x"] & my_head["y"] == section["y"]+1:
             return False
     return True
@@ -114,6 +116,7 @@ def is_left_safe(my_head: Dict[str, int], my_body: List[dict], board_height, boa
     if my_head["y"] == 0:
         return False
     for section in my_body:
+        print(f"{section}")
         if my_head["y"] == section["y"] & my_head["x"] == section["x"]+1:
             return False
     return True
@@ -122,6 +125,7 @@ def is_right_safe(my_head: Dict[str, int], my_body: List[dict], board_height, bo
     if my_head["x"] == board_width -1:
         return False
     for section in my_body:
+        print(f"{section}")
         if my_head["y"] == section["y"] & my_head["x"] == section["y"]-1:
             return False
     return True
