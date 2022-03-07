@@ -50,10 +50,10 @@ def choose_move(data: dict) -> str:
     my_body = data["you"]["body"]  # A list of x/y coordinate dictionaries like [ {"x": 0, "y": 0}, {"x": 1, "y": 0}, {"x": 2, "y": 0} ]
 
     # TODO: uncomment the lines below so you can see what this data looks like in your output!
-    # print(f"~~~ Turn: {data['turn']}  Game Mode: {data['game']['ruleset']['name']} ~~~")
-    # print(f"All board data this turn: {data}")
-    # print(f"My Battlesnakes head this turn is: {my_head}")
-    # print(f"My Battlesnakes body this turn is: {my_body}")
+    print(f"~~~ Turn: {data['turn']}  Game Mode: {data['game']['ruleset']['name']} ~~~")
+    print(f"All board data this turn: {data}")
+    print(f"My Battlesnakes head this turn is: {my_head}")
+    print(f"My Battlesnakes body this turn is: {my_body}")
 
     possible_moves = ["up", "down", "left", "right"]
 
@@ -63,8 +63,6 @@ def choose_move(data: dict) -> str:
     # TODO: Using information from 'data', find the edges of the board and don't let your Battlesnake move beyond them
     board_height = data["board"]["height"]
     board_width = data["board"]["width"]
-    print(board_height)
-    print(board_width)
 
     # TODO Using information from 'data', don't let your Battlesnake pick a move that would hit its own body
 
@@ -76,15 +74,33 @@ def choose_move(data: dict) -> str:
     # move = random.choice(possible_moves)
     # TODO: Explore new strategies for picking a move that are better than random
 
-    if my_head["x"] == 0:
-        possible_moves.remove("left")
-    if my_head["x"] == board_width - 1:
-        possible_moves.remove("right")
-
-    if my_head["y"] == 0:
-        possible_moves.remove("down")
+    # Don't move up if ...
     if my_head["y"] == board_height -1:
         possible_moves.remove("up")
+    for section in my_body:
+        if my_head["x"] == section["x"] & my_head["y"] == section["y"]-1:
+            possible_moves.remove("up")
+
+    # Don't move left if ...
+    if my_head["x"] == 0:
+        possible_moves.remove("left")
+    for section in my_body:
+        if my_head["y"] == section["y"] & my_head["x"] == section["x"]+1:
+            possible_moves.remove("up")
+
+    # Don't move down if ...
+    if my_head["y"] == 0:
+        possible_moves.remove("down")
+    for section in my_body:
+        if my_head["x"] == section["x"] & my_head["y"] == section["y"]+1:
+            possible_moves.remove("up")
+
+    # Don't move right if ...
+    if my_head["x"] == board_width - 1:
+        possible_moves.remove("right")
+    for section in my_body:
+        if my_head["y"] == section["y"] & my_head["x"] == section["x"]-1:
+            possible_moves.remove("up")
 
     move = random.choice(possible_moves)
 
