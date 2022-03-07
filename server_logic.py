@@ -92,13 +92,13 @@ def choose_move(data: dict) -> str:
         print(f"Removing right, it's dangerous!")
         possible_moves.remove("right")
 
-    move = random.choice(possible_moves)
+    move = possible_moves[0] # random.choice(possible_moves)
 
     print(f"{data['game']['id']} MOVE {data['turn']}: {move} picked from all valid options in {possible_moves}")
 
     return move
 
-def is_up_safe(my_head: Dict[str, int], my_body: List[dict], board_height, board_width, snakes) -> boolean:
+def is_up_safe(my_head: Dict[str, int], my_body: List[dict], board_height: int, board_width: int, snakes) -> boolean:
     safeness = True
     if my_head["y"] == board_height-1:
         safeness = False
@@ -112,7 +112,7 @@ def is_up_safe(my_head: Dict[str, int], my_body: List[dict], board_height, board
             safeness = False
     return safeness
 
-def is_down_safe(my_head: Dict[str, int], my_body: List[dict], board_height, board_width, snakes) -> boolean:
+def is_down_safe(my_head: Dict[str, int], my_body: List[dict], board_height: int, board_width: int, snakes) -> boolean:
     safeness = True
     if my_head["y"] == 0:
         safeness = False
@@ -127,7 +127,7 @@ def is_down_safe(my_head: Dict[str, int], my_body: List[dict], board_height, boa
 
     return safeness
 
-def is_left_safe(my_head: Dict[str, int], my_body: List[dict], board_height, board_width, snakes) -> boolean:
+def is_left_safe(my_head: Dict[str, int], my_body: List[dict], board_height: int, board_width: int, snakes) -> boolean:
     safeness = True
     if my_head["x"] == 0:
         safeness = False
@@ -142,7 +142,7 @@ def is_left_safe(my_head: Dict[str, int], my_body: List[dict], board_height, boa
 
     return safeness
 
-def is_right_safe(my_head: Dict[str, int], my_body: List[dict], board_height, board_width, snakes) -> boolean:
+def is_right_safe(my_head: Dict[str, int], my_body: List[dict], board_height: int, board_width: int, snakes) -> boolean:
     safeness = True
     if my_head["x"] == board_width-1:
         safeness = False
