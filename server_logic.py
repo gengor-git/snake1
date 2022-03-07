@@ -54,7 +54,7 @@ def avoid_snakes(snakes, possible_moves: List[dict]) -> List[dict]:
 
     return possible_moves
 
-def avoid_walls(board_width, board_height, possible_moves: List[dict]):
+def avoid_walls(board_width, board_height, possible_moves: List[dict]) -> List[dict]:
     to_remove = []
 
     for direction, location in possible_moves.items():
@@ -120,7 +120,7 @@ def choose_move(data: dict) -> str:
     board_height = data["board"]["height"]
     board_width = data["board"]["width"]
 
-    possible_moves = avoid_my_body(my_head, possible_moves)
+    possible_moves = avoid_my_body(my_body, possible_moves)
     possible_moves = avoid_snakes(snakes, possible_moves)
     possible_moves = avoid_walls(board_width, board_height, possible_moves)
 
