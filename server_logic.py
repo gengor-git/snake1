@@ -29,6 +29,7 @@ def avoid_my_body(my_body: List[dict], possible_moves: List[dict]) -> List[dict]
 
     for direction, location in possible_moves.items():
         if location in my_body:
+            print(f"Removing {direction}")
             to_remove.append(direction)
 
     for direction in to_remove:
@@ -47,6 +48,7 @@ def avoid_snakes(snakes, possible_moves: List[dict]) -> List[dict]:
     for snake in snakes:
         for direction, location in possible_moves.items():
             if location in snake["body"]:
+                print(f"Removing {direction}")
                 to_remove.append(direction)
 
     for direction in to_remove:
@@ -61,8 +63,9 @@ def avoid_walls(board_width, board_height, possible_moves: List[dict]) -> List[d
         x_off_range = (location["x"] < 0 or location["x"] == board_width)
         y_off_range = (location["y"] < 0 or location["y"] == board_height)
 
-    if x_off_range or y_off_range:
-        to_remove.append(direction)
+        if x_off_range or y_off_range:
+            print(f"Removing {direction}")
+            to_remove.append(direction)
 
     for direction in to_remove:
         del possible_moves[direction]
