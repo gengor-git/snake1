@@ -123,7 +123,7 @@ def choose_move(data: dict) -> str:
     board_height = data["board"]["height"]
     board_width = data["board"]["width"]
 
-    possible_moves = avoid_my_body(my_body, possible_moves)
+    # possible_moves = avoid_my_body(my_body, possible_moves)
     possible_moves = avoid_snakes(snakes, possible_moves)
     possible_moves = avoid_walls(board_width, board_height, possible_moves)
 
