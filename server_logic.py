@@ -94,10 +94,7 @@ def choose_move(data: dict) -> str:
 
     # move = possible_moves[0] # random.choice(possible_moves)
 
-    if my_head["x"] < 5:
-        move = possible_moves[-1]
-    else:
-        move = possible_moves[0]
+    move = possible_moves[-1]
 
     print(f"{data['game']['id']} MOVE {data['turn']}: {move} picked from all valid options in {possible_moves}")
 
