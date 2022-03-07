@@ -99,15 +99,15 @@ def choose_move(data: dict) -> str:
         }, 
         "down": {
             "x": my_head["x"], 
-            "y":my_head["y"] - 1
+            "y": my_head["y"] - 1
         }, 
         "left": {
             "x": my_head["x"] - 1, 
-            "y":my_head["y"]
+            "y": my_head["y"]
         }, 
         "right": {
             "x": my_head["x"] + 1, 
-            "y":my_head["y"]
+            "y": my_head["y"]
         }, 
     }
 
