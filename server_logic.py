@@ -95,37 +95,41 @@ def choose_move(data: dict) -> str:
     return move
 
 def is_up_safe(my_head: Dict[str, int], my_body: List[dict], board_height, board_width):
-    if my_head["y"] == board_height -1:
-        return False
+    safeness = True
+    if my_head["y"] == board_height-1:
+        safeness = False
     for section in my_body:
         print(f"{section}")
         if my_head["x"] == section["x"] and my_head["y"] == section["y"]-1:
-            return False
-    return True
+            safeness = False
+    return safeness
 
 def is_down_safe(my_head: Dict[str, int], my_body: List[dict], board_height, board_width):
+    safeness = True
     if my_head["y"] == 0:
-        return False
+        safeness = False
     for section in my_body:
         print(f"{section}")
         if my_head["x"] == section["x"] and my_head["y"] == section["y"]+1:
-            return False
-    return True
+            safeness = False
+    return safeness
 
 def is_left_safe(my_head: Dict[str, int], my_body: List[dict], board_height, board_width):
+    safeness = True
     if my_head["y"] == 0:
-        return False
+        safeness = False
     for section in my_body:
         print(f"{section}")
         if my_head["y"] == section["y"] and my_head["x"] == section["x"]+1:
-            return False
-    return True
+            safeness = False
+    return safeness
 
 def is_right_safe(my_head: Dict[str, int], my_body: List[dict], board_height, board_width):
-    if my_head["x"] == board_width -1:
-        return False
+    safeness = True
+    if my_head["x"] == board_width-1:
+        safeness = False
     for section in my_body:
         print(f"{section}")
         if my_head["y"] == section["y"] and my_head["x"] == section["y"]-1:
-            return False
-    return True
+            safeness = False
+    return safeness
