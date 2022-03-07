@@ -1,5 +1,11 @@
+from crypt import methods
+from fnmatch import fnmatch
+from lib2to3.pgen2.pgen import DFAState
+from logging.config import DEFAULT_LOGGING_CONFIG_PORT
 import random
+from re import I
 from typing import List, Dict
+from xml.dom.pulldom import default_bufsize
 from xmlrpc.client import boolean
 
 """
@@ -10,29 +16,59 @@ from the list of possible moves!
 """
 
 
-def avoid_my_neck(my_head: Dict[str, int], my_body: List[dict], possible_moves: List[str]) -> List[str]:
+def avoid_my_body(my_body: List[dict], possible_moves: List[dict]) -> List[dict]:
     """
-    my_head: Dictionary of x/y coordinates of the Battlesnake head.
-            e.g. {"x": 0, "y": 0}
     my_body: List of dictionaries of x/y coordinates for every segment of a Battlesnake.
             e.g. [ {"x": 0, "y": 0}, {"x": 1, "y": 0}, {"x": 2, "y": 0} ]
-    possible_moves: List of strings. Moves to pick from.
+    possible_moves: Dictionary of strings. Moves to pick from.
             e.g. ["up", "down", "left", "right"]
 
-    return: The list of remaining possible_moves, with the 'neck' direction removed
+    return: The list of remaining possible_moves, with the 'false' direction removed
     """
-    my_neck = my_body[1]  # The segment of body right after the head is the 'neck'
+    to_remove =  []
 
-    if my_neck["x"] < my_head["x"]:  # my neck is left of my head
-        possible_moves.remove("left")
-    elif my_neck["x"] > my_head["x"]:  # my neck is right of my head
-        possible_moves.remove("right")
-    elif my_neck["y"] < my_head["y"]:  # my neck is below my head
-        possible_moves.remove("down")
-    elif my_neck["y"] > my_head["y"]:  # my neck is above my head
-        possible_moves.remove("up")
+    for direction, location in possible_moves.items():
+        if location in my_body:
+            to_remove.append(direction)
+
+    for direction in to_remove:
+        del possible_moves[direction]
 
     return possible_moves
+
+def avoid_snakes(snakes, possible_moves: List[dict]) -> List[dict]:
+    """
+    snakes: The list of snakes to remove.
+    possible_moves: Dictionary of moves.
+    return: The dictionary of moves, which have no snake bodies in the way.
+    """
+    to_remove = []
+
+    for snake in snakes:
+        for direction, location in possible_moves.items():
+            if location in snake["body"]:
+                to_remove.append(direction)
+
+    for direction in to_remove:
+        del possible_moves[direction]
+
+    return possible_moves
+
+def avoid_walls(board_width, board_height, possible_moves: List[dict]):
+    to_remove = []
+
+    for direction, location in possible_moves.items():
+        x_off_range = (location["x"] < 0 or location["x"] == board_width)
+        y_off_range = (location["y"] < 0 or location["y"] == board_height)
+
+    if x_off_range or y_off_range:
+        to_remove.append(direction)
+
+    for direction in to_remove:
+        del possible_moves[direction]
+
+    return possible_moves
+
 
 
 def choose_move(data: dict) -> str:
@@ -55,9 +91,28 @@ def choose_move(data: dict) -> str:
     print(f"My Battlesnakes head this turn is: {my_head}")
     print(f"My Battlesnakes body this turn is: {my_body}")
 
-    possible_moves = ["up", "down", "left", "right"]
+    # possible_moves = ["up", "down", "left", "right"]
+    possible_moves = {
+        "up": {
+            "x": my_head["x"], 
+            "y": my_head["y"] + 1
+        }, 
+        "down": {
+            "x": my_head["x"], 
+            "y":my_head["y"] - 1
+        }, 
+        "left": {
+            "x": my_head["x"] - 1, 
+            "y":my_head["y"]
+        }, 
+        "right": {
+            "x": my_head["x"] + 1, 
+            "y":my_head["y"]
+        }, 
+    }
 
     snakes = data["board"]["snakes"]
+    food = data["board"]["food"]
 
     # Don't allow your Battlesnake to move back in on it's own neck
     #possible_moves = avoid_my_neck(my_head, my_body, possible_moves)
@@ -65,87 +120,13 @@ def choose_move(data: dict) -> str:
     board_height = data["board"]["height"]
     board_width = data["board"]["width"]
 
-    # TODO: Using information from 'data', make your Battlesnake move towards a piece of food on the board
-    # TODO: Explore new strategies for picking a move that are better than random
+    possible_moves = avoid_my_body(my_head, possible_moves)
+    possible_moves = avoid_snakes(snakes, possible_moves)
+    possible_moves = avoid_walls(board_width, board_height, possible_moves)
 
-    if not is_up_safe(my_head, my_body, board_height, board_width, snakes):
-        print(f"Removing up, it's dangerous!")
-        possible_moves.remove("up")
-    if not is_down_safe(my_head, my_body, board_height, board_width, snakes):
-        print(f"Removing down, it's dangerous!")
-        possible_moves.remove("down")
-    if not is_left_safe(my_head, my_body, board_height, board_width, snakes):
-        print(f"Removing left, it's dangerous!")
-        possible_moves.remove("left")
-    if not is_right_safe(my_head, my_body, board_height, board_width, snakes):
-        print(f"Removing right, it's dangerous!")
-        possible_moves.remove("right")
-
-    # move = possible_moves[0] # random.choice(possible_moves)
-
-
-    # TODO: Select the smartest move from the possible moves list.
-    move = possible_moves[-1]
+    possible_moves = list(possible_moves.keys())
+    move = random.choice(possible_moves)
 
     print(f"{data['game']['id']} MOVE {data['turn']}: {move} picked from all valid options in {possible_moves}")
 
     return move
-
-def is_up_safe(my_head: Dict[str, int], my_body: List[dict], board_height: int, board_width: int, snakes) -> boolean:
-    safeness = True
-    if my_head["y"] == board_height-1:
-        safeness = False
-
-    new_coords = {"x": my_head["x"], "y": my_head["y"]+1}
-    if new_coords in my_body:
-            safeness = False
-
-    for snake in snakes:
-        if new_coords in snake["body"]:
-            safeness = False
-    return safeness
-
-def is_down_safe(my_head: Dict[str, int], my_body: List[dict], board_height: int, board_width: int, snakes) -> boolean:
-    safeness = True
-    if my_head["y"] == 0:
-        safeness = False
-
-    new_coords = {"x": my_head["x"], "y": my_head["y"]-1}
-    if new_coords in my_body:
-            safeness = False
-    
-    for snake in snakes:
-        if new_coords in snake["body"]:
-            safeness = False
-
-    return safeness
-
-def is_left_safe(my_head: Dict[str, int], my_body: List[dict], board_height: int, board_width: int, snakes) -> boolean:
-    safeness = True
-    if my_head["x"] == 0:
-        safeness = False
-
-    new_coords = {"x": my_head["x"]-1, "y": my_head["y"]}
-    if new_coords in my_body:
-            safeness = False
-
-    for snake in snakes:
-        if new_coords in snake["body"]:
-            safeness = False
-
-    return safeness
-
-def is_right_safe(my_head: Dict[str, int], my_body: List[dict], board_height: int, board_width: int, snakes) -> boolean:
-    safeness = True
-    if my_head["x"] == board_width-1:
-        safeness = False
-
-    new_coords = {"x": my_head["x"]+1, "y": my_head["y"]}
-    if new_coords in my_body:
-            safeness = False
-
-    for snake in snakes:
-        if new_coords in snake["body"]:
-            safeness = False
-
-    return safeness
