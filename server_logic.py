@@ -75,13 +75,17 @@ def choose_move(data: dict) -> str:
     # TODO: Explore new strategies for picking a move that are better than random
 
 
-    if not isUpSafe(my_head, my_body, board_height, board_width):
+    if not is_up_safe(my_head, my_body, board_height, board_width):
+        print(f"Removing up, it's dangerous!")
         possible_moves.remove("up")
-    if not isDownSafe(my_head, my_body, board_height, board_width):
+    if not is_down_safe(my_head, my_body, board_height, board_width):
+        print(f"Removing down, it's dangerous!")
         possible_moves.remove("down")
-    if not isLeftSafe(my_head, my_body, board_height, board_width):
+    if not is_left_safe(my_head, my_body, board_height, board_width):
+        print(f"Removing left, it's dangerous!")
         possible_moves.remove("left")
-    if not isRightSafe(my_head, my_body, board_height, board_width):
+    if not is_right_safe(my_head, my_body, board_height, board_width):
+        print(f"Removing right, it's dangerous!")
         possible_moves.remove("right")
 
     move = random.choice(possible_moves)
@@ -90,7 +94,7 @@ def choose_move(data: dict) -> str:
 
     return move
 
-def isUpSafe(my_head: Dict[str, int], my_body: List[dict], board_height, board_width):
+def is_up_safe(my_head: Dict[str, int], my_body: List[dict], board_height, board_width):
     if my_head["y"] == board_height -1:
         return False
     for section in my_body:
@@ -98,7 +102,7 @@ def isUpSafe(my_head: Dict[str, int], my_body: List[dict], board_height, board_w
             return False
     return True
 
-def isDownSafe(my_head: Dict[str, int], my_body: List[dict], board_height, board_width):
+def is_down_safe(my_head: Dict[str, int], my_body: List[dict], board_height, board_width):
     if my_head["y"] == 0:
         return False
     for section in my_body:
@@ -106,7 +110,7 @@ def isDownSafe(my_head: Dict[str, int], my_body: List[dict], board_height, board
             return False
     return True
 
-def isLeftSafe(my_head: Dict[str, int], my_body: List[dict], board_height, board_width):
+def is_left_safe(my_head: Dict[str, int], my_body: List[dict], board_height, board_width):
     if my_head["y"] == 0:
         return False
     for section in my_body:
@@ -114,7 +118,7 @@ def isLeftSafe(my_head: Dict[str, int], my_body: List[dict], board_height, board
             return False
     return True
 
-def isRightSafe(my_head: Dict[str, int], my_body: List[dict], board_height, board_width):
+def is_right_safe(my_head: Dict[str, int], my_body: List[dict], board_height, board_width):
     if my_head["x"] == board_width -1:
         return False
     for section in my_body:
