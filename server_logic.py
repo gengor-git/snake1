@@ -1,5 +1,6 @@
 import random
 from typing import List, Dict
+from xmlrpc.client import boolean
 
 """
 This file can be a nice home for your move logic, and to write helper functions.
@@ -97,7 +98,7 @@ def choose_move(data: dict) -> str:
 
     return move
 
-def is_up_safe(my_head: Dict[str, int], my_body: List[dict], board_height, board_width, snakes):
+def is_up_safe(my_head: Dict[str, int], my_body: List[dict], board_height, board_width, snakes) -> boolean:
     safeness = True
     if my_head["y"] == board_height-1:
         safeness = False
@@ -111,7 +112,7 @@ def is_up_safe(my_head: Dict[str, int], my_body: List[dict], board_height, board
             safeness = False
     return safeness
 
-def is_down_safe(my_head: Dict[str, int], my_body: List[dict], board_height, board_width, snakes):
+def is_down_safe(my_head: Dict[str, int], my_body: List[dict], board_height, board_width, snakes) -> boolean:
     safeness = True
     if my_head["y"] == 0:
         safeness = False
@@ -126,7 +127,7 @@ def is_down_safe(my_head: Dict[str, int], my_body: List[dict], board_height, boa
 
     return safeness
 
-def is_left_safe(my_head: Dict[str, int], my_body: List[dict], board_height, board_width, snakes):
+def is_left_safe(my_head: Dict[str, int], my_body: List[dict], board_height, board_width, snakes) -> boolean:
     safeness = True
     if my_head["x"] == 0:
         safeness = False
@@ -141,7 +142,7 @@ def is_left_safe(my_head: Dict[str, int], my_body: List[dict], board_height, boa
 
     return safeness
 
-def is_right_safe(my_head: Dict[str, int], my_body: List[dict], board_height, board_width, snakes):
+def is_right_safe(my_head: Dict[str, int], my_body: List[dict], board_height, board_width, snakes) -> boolean:
     safeness = True
     if my_head["x"] == board_width-1:
         safeness = False
