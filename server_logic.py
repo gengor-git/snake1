@@ -117,7 +117,7 @@ def is_down_safe(my_head: Dict[str, int], my_body: List[dict], board_height, boa
 
 def is_left_safe(my_head: Dict[str, int], my_body: List[dict], board_height, board_width):
     safeness = True
-    if my_head["y"] == 0:
+    if my_head["x"] == 0:
         safeness = False
 
     new_coords = {"x": my_head["x"]-1, "y": my_head["y"]}
