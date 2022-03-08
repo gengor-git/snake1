@@ -9,10 +9,7 @@ from xml.dom.pulldom import default_bufsize
 from xmlrpc.client import boolean
 
 """
-This file can be a nice home for your move logic, and to write helper functions.
-
-We have started this for you, with a function to help remove the 'neck' direction
-from the list of possible moves!
+Movement logic for Snake1.
 """
 
 def avoid_snakes(snakes: List[dict], possible_moves: List[dict]) -> List[dict]:
