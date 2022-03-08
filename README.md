@@ -14,7 +14,8 @@ This is my very first Battlesnake, which runs under the name 'King Hiss' on a He
 * [x] Don't run into myself.
 * [x] Don't run into other snakes.
 * [x] Don't run into walls.
-* [ ] Use [Scipy](https://scipy.org/) to navigate smarter to food
+* [ ] Add more test cases.
+* [ ] Use [Scipy](https://scipy.org/) to navigate [smarter to food](https://scipy.github.io/devdocs/reference/generated/scipy.spatial.KDTree.html#scipy.spatial.KDTree)
 * [ ] Don't run in spirals and die.
 
 ## Resources
