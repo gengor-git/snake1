@@ -15,30 +15,9 @@ We have started this for you, with a function to help remove the 'neck' directio
 from the list of possible moves!
 """
 
-
-def avoid_my_body(my_body: List[dict], possible_moves: List[dict]) -> List[dict]:
+def avoid_snakes(snakes: List[dict], possible_moves: List[dict]) -> List[dict]:
     """
-    my_body: List of dictionaries of x/y coordinates for every segment of a Battlesnake.
-            e.g. [ {"x": 0, "y": 0}, {"x": 1, "y": 0}, {"x": 2, "y": 0} ]
-    possible_moves: Dictionary of strings. Moves to pick from.
-            e.g. ["up", "down", "left", "right"]
-
-    return: The list of remaining possible_moves, with the 'false' direction removed
-    """
-    to_remove =  []
-
-    for direction, location in possible_moves.items():
-        if location in my_body:
-            to_remove.append(direction)
-
-    for direction in to_remove:
-        del possible_moves[direction]
-
-    return possible_moves
-
-def avoid_snakes(snakes, possible_moves: List[dict]) -> List[dict]:
-    """
-    snakes: The list of snakes to remove.
+    snakes: The list of snakes to avoid including myself.
     possible_moves: Dictionary of moves.
     return: The dictionary of moves, which have no snake bodies in the way.
     """
@@ -54,7 +33,13 @@ def avoid_snakes(snakes, possible_moves: List[dict]) -> List[dict]:
 
     return possible_moves
 
-def avoid_walls(board_width, board_height, possible_moves: List[dict]):
+def avoid_walls(board_width: int, board_height: int, possible_moves: List[dict]):
+    """
+    board_width: The width of the board.
+    board_height: The height of the board.
+    possible_moves: The dictionary of moves to check against.
+    return: The dictionary of moves that are not moving into walls.
+    """
     to_remove = []
 
     for direction, location in possible_moves.items():
@@ -114,13 +99,9 @@ def choose_move(data: dict) -> str:
     snakes = data["board"]["snakes"]
     food = data["board"]["food"]
 
-    # Don't allow your Battlesnake to move back in on it's own neck
-    #possible_moves = avoid_my_neck(my_head, my_body, possible_moves)
-
     board_height = data["board"]["height"]
     board_width = data["board"]["width"]
 
-    possible_moves = avoid_my_body(my_head, possible_moves)
     possible_moves = avoid_snakes(snakes, possible_moves)
     possible_moves = avoid_walls(board_width, board_height, possible_moves)
 
