@@ -17,7 +17,7 @@ from the list of possible moves!
 
 def avoid_snakes(snakes: List[dict], possible_moves: List[dict]) -> List[dict]:
     """
-    snakes: The list of snakes to avoid including myself.
+    snakes: The list of snakes to remove.
     possible_moves: Dictionary of moves.
     return: The dictionary of moves, which have no snake bodies in the way.
     """
@@ -26,6 +26,7 @@ def avoid_snakes(snakes: List[dict], possible_moves: List[dict]) -> List[dict]:
     for snake in snakes:
         for direction, location in possible_moves.items():
             if location in snake["body"]:
+                print(f"Removing {direction}")
                 to_remove.append(direction)
 
     for direction in to_remove:
@@ -46,8 +47,9 @@ def avoid_walls(board_width: int, board_height: int, possible_moves: List[dict])
         x_off_range = (location["x"] < 0 or location["x"] == board_width)
         y_off_range = (location["y"] < 0 or location["y"] == board_height)
 
-    if x_off_range or y_off_range:
-        to_remove.append(direction)
+        if x_off_range or y_off_range:
+            print(f"Removing {direction}")
+            to_remove.append(direction)
 
     for direction in to_remove:
         del possible_moves[direction]
@@ -84,15 +86,15 @@ def choose_move(data: dict) -> str:
         }, 
         "down": {
             "x": my_head["x"], 
-            "y":my_head["y"] - 1
+            "y": my_head["y"] - 1
         }, 
         "left": {
             "x": my_head["x"] - 1, 
-            "y":my_head["y"]
+            "y": my_head["y"]
         }, 
         "right": {
             "x": my_head["x"] + 1, 
-            "y":my_head["y"]
+            "y": my_head["y"]
         }, 
     }
 
